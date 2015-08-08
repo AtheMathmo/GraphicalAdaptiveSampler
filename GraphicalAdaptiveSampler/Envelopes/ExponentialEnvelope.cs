@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using GraphicalAdaptiveSampler.Distributions;
 
 namespace GraphicalAdaptiveSampler.Envelopes
 {
     class ExponentialEnvelope : Envelope
     {
-        public ExponentialEnvelope()
+        public ExponentialEnvelope(double domainInf, double domainSup,
+            IList<double> initialPoints, IDistribution<double> distr)
+            : base(domainInf, domainSup, initialPoints)
         {
 
         }
 
-
-        public override void Sample()
+        protected override void UpdateRegionBound (Region region)
         {
-            List<double> probWeights = new List<double>();
+            throw new NotImplementedException ();
+        }
 
-            foreach (Region region in this.regionList)
-            {
+		public override int SampleDiscrete ()
+    	{
+    		throw new NotImplementedException ();
+    	}
 
-            }
+
             
-        }
+          
     }
 }

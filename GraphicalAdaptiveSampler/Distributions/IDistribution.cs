@@ -9,6 +9,12 @@ namespace GraphicalAdaptiveSampler.Distributions
     public interface IDistribution<DomainT>
     {
         /// <summary>
+        /// Gets a value indicating whether this instance is log concave.
+        /// </summary>
+        /// <value><c>true</c> if this instance is log concave; otherwise, <c>false</c>.</value>
+        bool IsLogConcave { get; }
+
+        /// <summary>
         /// Computes the log of the pdf.
         /// </summary>
         /// <param name="x">Point at which to evaluate.</param>
