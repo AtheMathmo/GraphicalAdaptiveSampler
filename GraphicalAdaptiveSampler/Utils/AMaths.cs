@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace GraphicalAdaptiveSampler.Utils
 {
-    class AMaths
+    public static class AMaths
     {
+        public static double LnGamma(double x)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

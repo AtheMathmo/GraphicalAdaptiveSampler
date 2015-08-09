@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Utils;
+
 namespace GraphicalAdaptiveSampler.Distributions
 {
     class Gamma : IDistribution<double>
@@ -21,12 +23,12 @@ namespace GraphicalAdaptiveSampler.Distributions
 
         public double GetLogProb (double x)
         {
-            throw new NotImplementedException ();
+            return (this.Shape - 1) * Math.Log(x) - (x / this.Scale) - (this.Shape * Math.Log(this.Scale)) - AMaths.LnGamma(this.Shape);
         }
 
         public double GetLogProbDeriv (double x)
         {
-            throw new NotImplementedException ();
+            return (this.Shape - 1) / x - 1 / this.Scale;
         }
 
         /// <summary>

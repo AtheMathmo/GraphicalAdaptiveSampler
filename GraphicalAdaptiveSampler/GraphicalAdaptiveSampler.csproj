@@ -53,6 +53,7 @@
     <Compile Include="Utils\AMaths.cs" />
     <Compile Include="Envelopes\DiscreteEnvelope.cs" />
     <Compile Include="Distributions\ILogConcaveDistribution.cs" />
+    <Compile Include="Utils\SRandom.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

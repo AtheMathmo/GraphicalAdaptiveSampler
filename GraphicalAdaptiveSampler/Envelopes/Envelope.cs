@@ -18,13 +18,52 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
 			this.regionList = new List<Region> ();
 
-            this.regionList.Add(new Region(double.NegativeInfinity, -1));
-            this.regionList.Add(new Region(-1, 0));
-            this.regionList.Add(new Region(0, 2));
-            this.regionList.Add(new Region(2, double.PositiveInfinity));
+            using (IEnumerator<double> points = initialPoints.OrderBy(p => p).GetEnumerator())
+            {
+                points.MoveNext();
+                double currentPoint = points.Current;
+
+                this.regionList.Add(new Region(this.DomainInf, currentPoint));
+
+                while (points.MoveNext())
+                {
+                    this.regionList.Add(new Region(currentPoint, points.Current));
+                    currentPoint = points.Current;
+                }
+
+                this.regionList.Add(new Region(currentPoint, this.DomainSup));
+
+            }
         }
 
-        public abstract int SampleDiscrete();
+        protected Region SampleDiscrete()
+        {
+            List<double> probs = new List<double>();
+
+            foreach (Region region in this.regionList)
+            {
+                probs.Add(this.GetRegionProb(region));
+            }
+
+            double sumOfProbs = probs.Sum();
+            double cumsum = 0;
+            double rand = Utils.SRandom.GetUniform();
+
+            foreach (Region region in this.regionList)
+            {
+                double prob = this.GetRegionProb(region);
+                cumsum += prob/sumOfProbs;
+                if (rand < cumsum)
+                {
+                    return region;
+                }
+            }
+            throw new InvalidOperationException("No region was sampled, i.e. range(rand) > cumsum. This should never happen.");
+        }
+
+        protected abstract double GetRegionProb(Region region);
+
+        public abstract double SampleContinuous();
 
         protected abstract void UpdateRegionBound(Region region);
 
@@ -59,7 +98,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
         public double DomainSup { get; private set; }
 
-        protected class Region
+        public class Region
         {
             private double lowerBound;
             private double upperBound;

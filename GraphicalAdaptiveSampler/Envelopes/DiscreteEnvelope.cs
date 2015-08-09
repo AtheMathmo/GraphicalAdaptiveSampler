@@ -17,13 +17,13 @@ namespace GraphicalAdaptiveSampler.Envelopes
 		{
             this.distr = distr;
             this.regionBoundMap = new Dictionary<Region, double>();
+            this.InitializeRegionBounds();
 		}
 
         protected override void UpdateRegionBound (Region region)
         {
             double regionMax = ComputeRegionMax(region);
 
-            Console.WriteLine(regionMax);
             if (this.regionBoundMap.ContainsKey(region))
             {
                 this.regionBoundMap[region] = regionMax;
@@ -34,31 +34,23 @@ namespace GraphicalAdaptiveSampler.Envelopes
             }
         }
 
-		public override int SampleDiscrete ()
-		{
-            List<double> probs = new List<double>();
+        protected override double GetRegionProb(Region region)
+        {
+            return Math.Exp(this.regionBoundMap[region]);
+        }
 
-            foreach (Region region in this.regionList)
+        public override double SampleContinuous()
+        {
+            Region sampledRegion = SampleDiscrete();
+            double rand = Utils.SRandom.GetUniform();
+
+            if (sampledRegion.LowerBound == double.NegativeInfinity || sampledRegion.UpperBound == double.PositiveInfinity)
             {
-                probs.Add(Math.Exp(this.regionBoundMap[region]));
+                throw new NotImplementedException("Cannot sample uniformly over infinite domains. Use a transformation.");
             }
 
-            double sumOfProbs = probs.Sum();
-            double cumsum = 0;
-            double rand = 0;
-            throw new NotImplementedException();
-
-            for (int i = 0; i < probs.Count(); i++)
-            {
-                double prob = probs[i];
-                cumsum += probs[i]/sumOfProbs;
-                if (rand < cumsum)
-                {
-                    return i;
-                }
-            }
-
-		}
+            return sampledRegion.LowerBound + rand * (sampledRegion.UpperBound - sampledRegion.LowerBound);
+        }
 
         private void InitializeRegionBounds()
         {
@@ -70,7 +62,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
         private double ComputeRegionMax(Region region)
         {
-            // distr is used in this method.
+            // If log concave exact values can be chosen.
             if (distr.IsLogConcave)
             {
                 ILogConcaveDistribution<double> logConcDistr = (ILogConcaveDistribution<double>) distr;

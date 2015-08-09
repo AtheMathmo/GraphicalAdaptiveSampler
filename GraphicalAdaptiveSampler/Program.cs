@@ -23,10 +23,16 @@ namespace GraphicalAdaptiveSampler
 
         private static void TestEnvelope()
         {
-            Gaussian gaussian = new Gaussian();
-            DiscreteEnvelope env = new DiscreteEnvelope(double.NegativeInfinity, double.PositiveInfinity, new double[] { -2, 0, 2 }, gaussian);
+            Gaussian gaussian = new Gaussian(0, 1e-3);
+            DiscreteEnvelope env = new DiscreteEnvelope(-5, 5, new double[] { -2, 0, 2 }, gaussian);
 
             env.AddCutPoint(4);
+
+            for (int i = 0; i < 10000; i++)
+            {
+                double test = env.SampleContinuous();
+                Console.WriteLine(test);
+            }
             Console.WriteLine("All Worked!");
         }
     }
