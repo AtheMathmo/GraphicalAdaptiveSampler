@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Distributions;
 using GraphicalAdaptiveSampler.Envelopes;
+using GraphicalAdaptiveSampler.Utils;
 
 namespace GraphicalAdaptiveSampler
 {
@@ -19,12 +20,13 @@ namespace GraphicalAdaptiveSampler
             // Ensuring that for infinite regions we have a negative gradient.
 
             TestEnvelope();
+            //TestGammaFunc();
         }
 
         private static void TestEnvelope()
         {
             Gaussian gaussian = new Gaussian(0, 1e-3);
-            DiscreteEnvelope env = new DiscreteEnvelope(-5, 5, new double[] { -2, 0, 2 }, gaussian);
+            DiscreteEnvelope env = new DiscreteEnvelope(-5, 5, gaussian, new double[] { -2, 0, 2 });
 
             env.AddCutPoint(4);
 
@@ -34,6 +36,11 @@ namespace GraphicalAdaptiveSampler
                 Console.WriteLine(test);
             }
             Console.WriteLine("All Worked!");
+        }
+
+        private static void TestGammaFunc()
+        {
+            Console.WriteLine(AMaths.LnGamma(0.5));
         }
     }
 }

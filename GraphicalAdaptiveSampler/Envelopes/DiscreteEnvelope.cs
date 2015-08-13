@@ -6,19 +6,37 @@ using GraphicalAdaptiveSampler.Distributions;
 
 namespace GraphicalAdaptiveSampler.Envelopes
 {
-	public class DiscreteEnvelope : Envelope
+    public class DiscreteEnvelope : Envelope<double>
 	{
-        private IDistribution<double> distr;
-        private Dictionary<Region, double> regionBoundMap;
-
         public DiscreteEnvelope (double domainInf, double domainSup,
-            IList<double> initialPoints, IDistribution<double> distr)
-            : base(domainInf, domainSup, initialPoints)
+            IDistribution<double> distr, IList<double> initialPoints)
+            : base(domainInf, domainSup, distr, initialPoints)
 		{
-            this.distr = distr;
-            this.regionBoundMap = new Dictionary<Region, double>();
-            this.InitializeRegionBounds();
+            
 		}
+
+        protected override void InitializeEnvelope(IList<double> initialPoints)
+        {
+            using (IEnumerator<double> points = initialPoints.OrderBy(p => p).GetEnumerator())
+            {
+                points.MoveNext();
+                double currentPoint = points.Current;
+
+                this.regionList.Add(new Region(this.DomainInf, currentPoint));
+
+                while (points.MoveNext())
+                {
+                    this.regionList.Add(new Region(currentPoint, points.Current));
+                    currentPoint = points.Current;
+                }
+
+                this.regionList.Add(new Region(currentPoint, this.DomainSup));
+            }
+            foreach (Region region in this.regionList)
+            {
+                this.regionBoundMap.Add(region, ComputeRegionMax(region));
+            }
+        }
 
         protected override void UpdateRegionBound (Region region)
         {
@@ -46,18 +64,10 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
             if (sampledRegion.LowerBound == double.NegativeInfinity || sampledRegion.UpperBound == double.PositiveInfinity)
             {
-                throw new NotImplementedException("Cannot sample uniformly over infinite domains. Use a transformation.");
+                throw new NotSupportedException("Cannot sample uniformly over infinite domains. Use a transformation.");
             }
 
             return sampledRegion.LowerBound + rand * (sampledRegion.UpperBound - sampledRegion.LowerBound);
-        }
-
-        private void InitializeRegionBounds()
-        {
-            foreach (Region region in this.regionList)
-            {
-                this.regionBoundMap.Add(region, ComputeRegionMax(region));
-            }
         }
 
         private double ComputeRegionMax(Region region)

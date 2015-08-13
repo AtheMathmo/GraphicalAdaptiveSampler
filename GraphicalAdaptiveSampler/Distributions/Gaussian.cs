@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Utils;
+
 namespace GraphicalAdaptiveSampler.Distributions
 {
     class Gaussian : ILogConcaveDistribution<double>
@@ -34,7 +36,7 @@ namespace GraphicalAdaptiveSampler.Distributions
         /// <returns>The log of the pdf.</returns>
         public double GetLogProb(double x)
         {
-            return Math.Log(this.Precision) - Math.Log(2 * Math.PI) - this.Precision * ((x - this.Mean) * (x - this.Mean)) / 2;
+            return Math.Log(this.Precision) - AMaths.LN_2_PI - this.Precision * ((x - this.Mean) * (x - this.Mean)) / 2;
         }
 
         /// <summary>

@@ -4,38 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Distributions;
+
 namespace GraphicalAdaptiveSampler.Envelopes
 {
-    public abstract class Envelope
+    public abstract class Envelope<BoundT>
     {
+        protected IDistribution<double> distr;
         protected List<Region> regionList;
+        protected Dictionary<Region, BoundT> regionBoundMap;
 
-        public Envelope(double domainInf, double domainSup, IList<double> initialPoints)
+        public Envelope(double domainInf, double domainSup, 
+            IDistribution<double> distr, IList<double> initialPoints)
         {
             // Set envelope domain bounds
             this.DomainInf = domainInf;
             this.DomainSup = domainSup;
 
+            this.distr = distr;
 			this.regionList = new List<Region> ();
+            this.regionBoundMap = new Dictionary<Region, BoundT>();
 
-            using (IEnumerator<double> points = initialPoints.OrderBy(p => p).GetEnumerator())
-            {
-                points.MoveNext();
-                double currentPoint = points.Current;
-
-                this.regionList.Add(new Region(this.DomainInf, currentPoint));
-
-                while (points.MoveNext())
-                {
-                    this.regionList.Add(new Region(currentPoint, points.Current));
-                    currentPoint = points.Current;
-                }
-
-                this.regionList.Add(new Region(currentPoint, this.DomainSup));
-
-            }
+            InitializeEnvelope(initialPoints);
         }
 
+        protected abstract void InitializeEnvelope(IList<double> initialCuts);
+
+        /// <summary>
+        /// Samples over the discrete distribution to return a region.
+        /// </summary>
+        /// <returns>A region.</returns>
         protected Region SampleDiscrete()
         {
             List<double> probs = new List<double>();
@@ -61,15 +59,32 @@ namespace GraphicalAdaptiveSampler.Envelopes
             throw new InvalidOperationException("No region was sampled, i.e. range(rand) > cumsum. This should never happen.");
         }
 
+        /// <summary>
+        /// Gets the total probability for a region.
+        /// </summary>
+        /// <returns>The region probability.</returns>
+        /// <param name="region">Region.</param>
         protected abstract double GetRegionProb(Region region);
 
+        /// <summary>
+        /// Samples continuously from the envelope.
+        /// </summary>
+        /// <returns>The continuous sample.</returns>
         public abstract double SampleContinuous();
 
+        /// <summary>
+        /// Updates the region bound.
+        /// </summary>
+        /// <param name="region">Region.</param>
         protected abstract void UpdateRegionBound(Region region);
 
-        public void AddCutPoint(double point)
+        /// <summary>
+        /// Adds a cut point to the envelope.
+        /// </summary>
+        /// <param name="point">Cut point.</param>
+        public void AddCutPoint(double cutPoint)
 		{
-            if (point < this.DomainInf || point > this.DomainSup)
+            if (cutPoint < this.DomainInf || cutPoint > this.DomainSup)
             {
                 throw new ArgumentException("New cut point must be within envelope domain", "point");
             }
@@ -77,12 +92,12 @@ namespace GraphicalAdaptiveSampler.Envelopes
             // Check for the region containing the point
 			foreach (Region region in this.regionList)
 			{
-                if (region.ContainsPoint(point))
+                if (region.ContainsPoint(cutPoint))
                 {
                     // Add new region to the right of the intersection
-                    Region newRegion = new Region(point, region.UpperBound);
+                    Region newRegion = new Region(cutPoint, region.UpperBound);
                     this.regionList.Add(newRegion);
-                    region.UpperBound = point;
+                    region.UpperBound = cutPoint;
 
                     // Update the bounds on the modified regions
                     UpdateRegionBound(region);
@@ -94,10 +109,22 @@ namespace GraphicalAdaptiveSampler.Envelopes
 			}
 		}
 
+        /// <summary>
+        /// Gets the domain inf.
+        /// </summary>
+        /// <value>The domain inf.</value>
         public double DomainInf { get; private set; }
 
+        /// <summary>
+        /// Gets the domain sup.
+        /// </summary>
+        /// <value>The domain sup.</value>
         public double DomainSup { get; private set; }
 
+        /// <summary>
+        /// Region representing discrete subset of envelope domain.
+        /// 
+        /// </summary>
         public class Region
         {
             private double lowerBound;

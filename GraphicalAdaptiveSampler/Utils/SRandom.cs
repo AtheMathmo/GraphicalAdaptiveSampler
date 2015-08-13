@@ -6,6 +6,8 @@ namespace GraphicalAdaptiveSampler.Utils
     {
         private static Random rand = new Random();
 
+
+
         public static double GetUniform()
         {
             return rand.NextDouble();

@@ -54,6 +54,7 @@
     <Compile Include="Envelopes\DiscreteEnvelope.cs" />
     <Compile Include="Distributions\ILogConcaveDistribution.cs" />
     <Compile Include="Utils\SRandom.cs" />
+    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
