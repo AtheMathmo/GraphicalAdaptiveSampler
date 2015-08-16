@@ -20,8 +20,8 @@ namespace GraphicalAdaptiveSampler
             // Ensuring that for infinite regions we have a negative gradient.
 
             //TestEnvelope();
-            //TestGammaFunc();
-            ARSTest();
+            TestGammaFunc(5);
+            //ARSTest();
         }
 
         private static void TestEnvelope()
@@ -37,9 +37,9 @@ namespace GraphicalAdaptiveSampler
             Console.WriteLine("All Worked!");
         }
 
-        private static void TestGammaFunc()
+        private static void TestGammaFunc(double x)
         {
-            Console.WriteLine(AMaths.LnGamma(0.5));
+            Console.WriteLine(AMaths.LnGamma(x));
         }
 
         private static void ARSTest(int sampleCount = 100000)
