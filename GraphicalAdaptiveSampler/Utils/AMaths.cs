@@ -20,22 +20,38 @@ namespace GraphicalAdaptiveSampler.Utils
         /// <param name="x">The x coordinate.</param>
         public static double LnGamma(double x)
         {
+            if (x <= 0)
+            {
+                throw new ArgumentException("Input x must be positive.", "x");
+            }
+            else if (x == 1 || x == 2)
+            {
+                return 0;
+            }
+
+            int reflectCutOff = 5;
             // n = 1, 2, 3, 4, 5, 6
             // B2n = 1/6, -1/30, 1/42, -1/30, 5/66, -691/2730
             // divided by 2n(2n-1)
-
             // cn = 1/12, -1/360, 1/1260, -1/1680, 1/1188, -691/360360
-            double c1 = 1.0/12;
-            double c2 = -1.0/360;
-            double c3 = 1.0/1260;
-            double c4 = -1.0 / 1680;
-            double c5 = 1 / 1188;
-            double c6 = -691 / 360360;
+
+            // These should be memorized.
+            double c1 = 0.08333333333333;
+            double c2 = -0.00277777777777;
+            double c3 = 0.00079365079365;
+            double c4 = -0.00059523809523;
+            double c5 = 0.00084175084175;
+            double c6 = -0.00191752691752;
 
             // Mirror property to get more accurate estimation of small values.
-            if (x < 2)
+            if (x < reflectCutOff)
             {
-                return LnGamma(x + 2) - Math.Log(x + 1) - Math.Log(x);
+                double reflectGamma = LnGamma(x + reflectCutOff);
+                for (int i = 0; i < reflectCutOff; i++)
+                {
+                    reflectGamma -= Math.Log(x + i); 
+                }
+                return reflectGamma;
             }
 
             double result = (x - 0.5) * Math.Log(x) - x + 0.5 * LN_2_PI;

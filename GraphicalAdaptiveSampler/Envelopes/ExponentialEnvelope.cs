@@ -42,6 +42,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
     /// </summary>
     class ExponentialEnvelope : Envelope<LinearBound>
     {
+        private List<double> cutPoints = new List<double>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicalAdaptiveSampler.Envelopes.ExponentialEnvelope"/> class.
@@ -72,6 +73,8 @@ namespace GraphicalAdaptiveSampler.Envelopes
         /// <param name="initialPoints">Initial points.</param>
         protected override void InitializeEnvelope(IList<double> initialPoints)
         {
+            List<double> newCutPoints = new List<double>();
+
             int pointCount = initialPoints.Count;
             List<double> logProbs = new List<double>();
             List<double> grads = new List<double>();
@@ -80,6 +83,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
             // Compute the log prob of each initial point.
             foreach (double point in initialPoints.OrderBy(p => p))
             {
+                newCutPoints.Add(point);
                 logProbs.Add(this.distr.GetLogProb(point));
             }
 
@@ -152,7 +156,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
                 this.regionList.Add(lastRegion);
                 this.regionBoundMap.Add(lastRegion, new LinearBound(intercepts.Last(), grads.Last()));
             }
-                
+            this.cutPoints = newCutPoints;                
         }
 
         /// <summary>
@@ -216,6 +220,13 @@ namespace GraphicalAdaptiveSampler.Envelopes
                 exponent += Math.Exp(grad * sampledRegion.LowerBound);
                 return Math.Log(exponent) / grad; 
             }
+        }
+
+        public override void AddCutPoint(double cutPoint)
+        {
+            // Currently very slow, only experimental.
+            this.cutPoints.Add(cutPoint);
+            InitializeEnvelope(this.cutPoints);
         }
 
         /// <summary>

@@ -140,7 +140,7 @@ namespace GraphicalAdaptiveSampler.Envelopes
         /// Adds a cut point to the envelope.
         /// </summary>
         /// <param name="point">Cut point.</param>
-        public void AddCutPoint(double cutPoint)
+        public virtual void AddCutPoint(double cutPoint)
 		{
             if (cutPoint < this.DomainInf || cutPoint > this.DomainSup)
             {
