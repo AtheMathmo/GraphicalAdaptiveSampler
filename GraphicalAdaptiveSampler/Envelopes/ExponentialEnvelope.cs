@@ -6,22 +6,50 @@ using GraphicalAdaptiveSampler.Distributions;
 
 namespace GraphicalAdaptiveSampler.Envelopes
 {
-    class LinearBound
+    /// <summary>
+    /// Linear bound for the exponential envelope.
+    /// </summary>
+    internal class LinearBound
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GraphicalAdaptiveSampler.Envelopes.LinearBound"/> class.
+        /// </summary>
+        /// <param name="intercept">Intercept.</param>
+        /// <param name="gradient">Gradient.</param>
         public LinearBound(double intercept, double gradient)
         {
             this.Intercept = intercept;
             this.Gradient = gradient;
         }
 
+        /// <summary>
+        /// Gets or sets the intercept.
+        /// </summary>
+        /// <value>The intercept.</value>
         public double Intercept { get; set; }
 
+        /// <summary>
+        /// Gets or sets the gradient.
+        /// </summary>
+        /// <value>The gradient.</value>
         public double Gradient {get; set; }
     }
 
+    /// <summary>
+    /// Exponential envelope.
+    /// Formed from the procedure described here:
+    /// http://www.angelfire.com/falcon/isinotes/statcomp/mcmc/gibbs5.html
+    /// </summary>
     class ExponentialEnvelope : Envelope<LinearBound>
     {
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GraphicalAdaptiveSampler.Envelopes.ExponentialEnvelope"/> class.
+        /// </summary>
+        /// <param name="domainInf">Domain inf.</param>
+        /// <param name="domainSup">Domain sup.</param>
+        /// <param name="distr">Distr.</param>
+        /// <param name="initialPoints">Initial points.</param>
         public ExponentialEnvelope(double domainInf, double domainSup,
             IDistribution<double> distr, IList<double> initialPoints)
             : base(domainInf, domainSup, distr, initialPoints)
@@ -37,6 +65,11 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
         }
 
+        /// <summary>
+        /// Initializes the exponential envelope. Creates the regions and associated bounds.
+        /// </summary>
+        /// <param name="initialCuts">Initial cuts.</param>
+        /// <param name="initialPoints">Initial points.</param>
         protected override void InitializeEnvelope(IList<double> initialPoints)
         {
             int pointCount = initialPoints.Count;
@@ -44,15 +77,13 @@ namespace GraphicalAdaptiveSampler.Envelopes
             List<double> grads = new List<double>();
             List<double> intercepts = new List<double>();
 
-            List<double> upperGrads = new List<double>();
-            List<double> upperIntercepts = new List<double>();
-
+            // Compute the log prob of each initial point.
             foreach (double point in initialPoints.OrderBy(p => p))
             {
                 logProbs.Add(this.distr.GetLogProb(point));
             }
 
-
+            // First pass computes the grads and intercepts for the lines between each point.
             using (IEnumerator<double> points = initialPoints.OrderBy(p => p).GetEnumerator())
             {
                 int index = 0;
@@ -62,8 +93,6 @@ namespace GraphicalAdaptiveSampler.Envelopes
 
                 while (points.MoveNext())
                 {
-                    // This is wrong, bounds are constructed from intersections as shown here:
-                    // http://www.angelfire.com/falcon/isinotes/statcomp/mcmc/gibbs5.html
                     double nextLogProb = logProbs[++index];
 
                     double grad = (nextLogProb - currentLogProb) / (points.Current - lastPoint);
@@ -75,23 +104,26 @@ namespace GraphicalAdaptiveSampler.Envelopes
                     currentLogProb = logProbs[index];
                 }
 
-                index = 0;
-                points.Reset();
-                points.MoveNext();
-                lastPoint = points.Current;
+            }
 
-                {
-                    Region region = new Region(DomainInf, lastPoint);
-                    this.regionList.Add(region);
-                    this.regionBoundMap.Add(region, new LinearBound(intercepts[index], grads[index]));
-                    index++;
-                }
+            // Second pass creates the regions and upperbounds for the envelope.
+            using (IEnumerator<double> points = initialPoints.OrderBy(p => p).GetEnumerator())
+            {
+                int index = 0;
+                points.MoveNext();
+                double lastPoint = points.Current;
+
+                // Region before the initial points
+                Region firstRegion = new Region(DomainInf, lastPoint);
+                this.regionList.Add(firstRegion);
+                this.regionBoundMap.Add(firstRegion, new LinearBound(intercepts[index], grads[index]));
+                index++;
+                
 
                 // Iterate over all but last (and first)
                 points.MoveNext();
                 for (var value = points.Current; points.MoveNext(); value = points.Current)
                 {
-                    // TODO add in the rest of this part from python code.
 
                     // Take gradient after point for region before point
                     Region backRegion = new Region(lastPoint, value);
@@ -99,23 +131,57 @@ namespace GraphicalAdaptiveSampler.Envelopes
                     this.regionBoundMap.Add(backRegion, new LinearBound(intercepts[index], grads[index]));
 
                     // Find intersect
-                    double intercept = (intercepts[index + 1] - intercepts[index - 1]) /
+                    if (index < pointCount - 2)
+                    {
+                        double intercept = (intercepts[index + 1] - intercepts[index - 1]) /
                                        (grads[index - 1] - grads[index + 1]);
 
-                    // Take gradient before point for region after point
-                    Region forwardRegion = new Region(value, intercept);
-                    this.regionList.Add(forwardRegion);
-                    this.regionBoundMap.Add(forwardRegion, new LinearBound(intercepts[index - 1], grads[index - 1]));
+                        // Take gradient before point for region after point
+                        Region forwardRegion = new Region(value, intercept);
+                        this.regionList.Add(forwardRegion);
+                        this.regionBoundMap.Add(forwardRegion, new LinearBound(intercepts[index - 1], grads[index - 1]));
+
+                        lastPoint = intercept;
+                    }
+
+                    index++;
                 }
+
+                // Add region after initial points
+                Region lastRegion = new Region(points.Current, DomainSup);
+                this.regionList.Add(lastRegion);
+                this.regionBoundMap.Add(lastRegion, new LinearBound(intercepts.Last(), grads.Last()));
             }
                 
         }
 
+        /// <summary>
+        /// Computes the envelope value of a given sample, under a specified bound.
+        /// The sample should be within the region with the specified bound,
+        /// but this method does not check for this.
+        /// </summary>
+        /// <returns>The prob from bound.</returns>
+        /// <param name="bound">Bound.</param>
+        /// <param name="sample">Sample.</param>
+        protected override double LogProbFromBound (LinearBound bound, double sample)
+        {
+            return bound.Gradient * sample + bound.Intercept; 
+        }
+
+        /// <summary>
+        /// Updates the region bound.
+        /// </summary>
+        /// <param name="region">Region.</param>
         protected override void UpdateRegionBound(Region region)
         {
             throw new NotImplementedException ();
         }
 
+        /// <summary>
+        /// Gets the total probability for a region.
+        /// </summary>
+        /// <returns>The region probability.</returns>
+        /// <param name="region">Region.</param>
         protected override double GetRegionProb(Region region)
     	{
             double intercept = this.regionBoundMap[region].Intercept;
@@ -124,10 +190,14 @@ namespace GraphicalAdaptiveSampler.Envelopes
             return (Math.Exp(intercept + grad * region.UpperBound) - Math.Exp(intercept + grad * region.LowerBound)) / grad;
     	}
 
-        public override double SampleContinuous ()
+        /// <summary>
+        /// Samples from the continuous distribution of this envelope, using a given region.
+        /// </summary>
+        /// <returns>The continuous sample.</returns>
+        /// <param name="sampledRegion">Sampled region.</param>
+        public override double SampleContinuous(Region sampledRegion)
         {
             // Here we compute the inverse of the exponential CDF (after normalizing).
-            Region sampledRegion = SampleDiscrete();
             double rand = Utils.SRandom.GetUniform();
 
             double grad = this.regionBoundMap[sampledRegion].Gradient;
@@ -148,6 +218,11 @@ namespace GraphicalAdaptiveSampler.Envelopes
             }
         }
 
+        /// <summary>
+        /// Computes the region bound.
+        /// </summary>
+        /// <returns>The region bound.</returns>
+        /// <param name="region">Region.</param>
         private LinearBound ComputeRegionBound(Region region)
         {
             throw new NotImplementedException();

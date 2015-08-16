@@ -59,12 +59,21 @@ namespace GraphicalAdaptiveSampler.Distributions
         /// </summary>
         public double Precision { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is log concave.
+        /// </summary>
+        /// <value>true</value>
+        /// <c>false</c>
         public bool IsLogConcave {
             get {
                 return true;
             }
         }
 
+        /// <summary>
+        /// Gets the max point of the pdf.
+        /// </summary>
+        /// <value>The max point.</value>
         public double MaxPoint {
             get {
                 return this.Mean;
