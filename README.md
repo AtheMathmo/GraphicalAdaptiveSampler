@@ -12,5 +12,5 @@ This is a work in progress.
 
 ## References
 
-[Factor Graphs and the Sum-Product Algorithm](http://vision.unipv.it/IA2/Factor%20graphs%20and%20the%20sum-product%20algorithm.pdf)
-[The OS\* Algorithm: a Join approach to Exact Optimization and Sampling](http://arxiv.org/pdf/1207.0742v1.pdf)
+1. [Factor Graphs and the Sum-Product Algorithm](http://vision.unipv.it/IA2/Factor%20graphs%20and%20the%20sum-product%20algorithm.pdf)
+2. [The OS\* Algorithm: a Join approach to Exact Optimization and Sampling](http://arxiv.org/pdf/1207.0742v1.pdf)
