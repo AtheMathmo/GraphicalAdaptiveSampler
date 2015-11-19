@@ -22,6 +22,14 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 
 		private FactorGraph factorGraph;
 
+		// For scheduling messages towards root
+		private Stack<Node> inSchedule;
+
+		// For scheduling messages out from root
+		private Stack<Node> outSchedule;
+
+
+
 		public BPAlgorithm(FactorGraph factorGraph)
 		{
 			this.factorGraph = factorGraph;

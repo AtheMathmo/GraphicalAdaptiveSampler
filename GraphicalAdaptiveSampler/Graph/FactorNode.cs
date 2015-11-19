@@ -6,9 +6,22 @@ using System.Threading.Tasks;
 
 namespace GraphicalAdaptiveSampler.Graph {
 
-	abstract class FactorNode : Node {
-		// Represents a factor within the factor graph.
+	// This node represents a factor in the factor graph
+	abstract class FactorNode {
+		
+		public VariableNode ChildVariable
+		{
+			get;
+			set;
+		}
 
+		public VariableNode[] ParentVariables
+		{
+			get;
+			set;
+		}
+
+		// Still figuring this out...
 		abstract double Density();
 	}
 

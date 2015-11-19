@@ -21,16 +21,13 @@ namespace GraphicalAdaptiveSampler.Graph {
 			bool valid = true;
 			// Should check that we have a bipartite graph.
 			throw new NotImplementedException("Currently no validity check in place.");
-
-			foreach (Node node in adjList.Keys)
-			{
-				// Check type of node is different to each type in list
-			}
 		}
 
 		public bool IsTree() {
 			// Check that we have a tree and can return exact marginals.
 			throw new NotImplementedException("Currently no tree check in place.");
+
+			//Do a breadth search and check we never hit the same node twice
 		}
 	}
 

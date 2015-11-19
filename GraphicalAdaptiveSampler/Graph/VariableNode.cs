@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace GraphicalAdaptiveSampler.Graph {
 
-	class VariableNode : Node {
-		// This node represents a random variable in the factor graph
+	// This node represents a random variable in the factor graph
+	abstract class VariableNode {
+		
+		public FactorNode ParentFactor
+		{
+			get;
+			set;
+		}
+
+		public FactorNode[] ChildFactors
+		{
+			get;
+			set;
+		}
 	}
 
 }

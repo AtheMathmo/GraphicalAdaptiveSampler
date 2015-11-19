@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GraphicalAdaptiveSampler.Algorithm {
 
-	class Function<T, TResult> {
-		private Func<T, TResult> func;
+	class Function<T, double> {
+		private Func<T, double> func;
 
 		// This class will contain a delegate which is used by the messages.
 		// We will provide methods to take products and sums of these delegates.
@@ -15,10 +15,10 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 
 		// This is the framework for products of messages.
 		// We will update this to use lists (for types)
-		public void ProductFunc(Func<T2, TResult> newFunc)
+		public void ProductFunc(Func<T2, double> newFunc)
 		{
 			// Basic idea.
-			Func<T, T2, TResult> replacFunc = delegate(T orig, T2 newVar) {
+			Func<T, T2, double> replacFunc = delegate(T orig, T2 newVar) {
 				return func(orig)*newFunc(newVar);
 			};
 		}

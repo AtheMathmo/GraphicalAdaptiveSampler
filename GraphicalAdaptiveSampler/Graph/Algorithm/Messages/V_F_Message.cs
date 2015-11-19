@@ -15,6 +15,8 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 		private VariableNode variable;
 		private FactorNode factor;
 
+		private Function message;
+
 		public void ComputeMessage()
 		{
 			// Find the neighbours of the variable
