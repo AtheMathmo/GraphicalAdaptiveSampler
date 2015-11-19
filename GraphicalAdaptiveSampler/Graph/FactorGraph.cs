@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 namespace GraphicalAdaptiveSampler.Graph {
 
 	class FactorGraph {
-		// This will consist of a List of Variable Nodes and Edges.
+		// Adjacency list representing bipartite graph
+		private Dictionary<Node, List<Node>> adjList;
 
-		private List<VariableNode> variableNodes;
-		private List<Edge> edges;
-
-		private VariableNode rootNode;
+		private int rootNodeIndex;
 
 		public bool IsValid() {
 			// Should check that we have a bipartite graph.
