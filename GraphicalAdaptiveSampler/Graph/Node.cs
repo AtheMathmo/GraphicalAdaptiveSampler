@@ -8,6 +8,17 @@ namespace GraphicalAdaptiveSampler.Graph {
 
 	class Node {
 
+		public IEnumerable<Node> Parents
+		{
+			get;
+			set;
+		}
+
+		public IEnumerable<Node> Children
+		{
+			get;
+			set;
+		}
 	}
 	
 }

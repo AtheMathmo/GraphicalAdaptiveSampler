@@ -7,14 +7,25 @@ using System.Threading.Tasks;
 namespace GraphicalAdaptiveSampler.Graph {
 
 	class FactorGraph {
-		// Adjacency list representing bipartite graph
-		private Dictionary<Node, List<Node>> adjList;
+		
+		private List<VariableNode> variables;
+		private List<FactorNode> factors;
 
-		private int rootNodeIndex;
+		public VariableNode RootNode
+		{
+			get;
+			set;
+		}
 
 		public bool IsValid() {
+			bool valid = true;
 			// Should check that we have a bipartite graph.
 			throw new NotImplementedException("Currently no validity check in place.");
+
+			foreach (Node node in adjList.Keys)
+			{
+				// Check type of node is different to each type in list
+			}
 		}
 
 		public bool IsTree() {
