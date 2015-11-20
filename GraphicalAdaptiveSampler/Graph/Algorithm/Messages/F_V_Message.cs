@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Graph;
+using GraphicalAdaptiveSampler.Graph.Algorithm;
 
 namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 
@@ -14,8 +15,6 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 
 		private VariableNode variable;
 		private FactorNode factor;
-
-		private Function message;
 
 		public void ComputeMessage()
 		{

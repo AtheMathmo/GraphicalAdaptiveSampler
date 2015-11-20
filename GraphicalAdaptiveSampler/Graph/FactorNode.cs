@@ -22,7 +22,7 @@ namespace GraphicalAdaptiveSampler.Graph {
 		}
 
 		// Still figuring this out...
-		abstract double Density();
+		public abstract double Density();
 	}
 
 }

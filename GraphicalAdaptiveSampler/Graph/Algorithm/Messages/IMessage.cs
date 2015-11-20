@@ -12,7 +12,7 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 	interface IMessage {
 
 		// Rather than void this should return a function.
-		public void ComputeMessage();
+		void ComputeMessage();
 
 	}
 

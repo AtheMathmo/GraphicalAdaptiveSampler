@@ -45,16 +45,16 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 		{
 			Queue<Node> searchQueue = new Queue<Node>();
 
-			Q.Enqueue(this.factorGraph.RootNode);
+            searchQueue.Enqueue(this.factorGraph.RootNode);
 
-			while (Q.Count > 0)
+            while (searchQueue.Count > 0)
 			{
-				var v = Q.Dequeue();
+                Node v = searchQueue.Dequeue();
 
 				foreach (Node u in v.Neighbours)
 				{
 					// Queue/Stack messages between u and v
-					Q.Enqueue(u);
+                    searchQueue.Enqueue(u);
 				}
 			}
 		}
