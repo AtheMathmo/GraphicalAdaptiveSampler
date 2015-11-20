@@ -11,6 +11,10 @@ namespace GraphicalAdaptiveSampler.Graph {
 		private List<VariableNode> variables;
 		private List<FactorNode> factors;
 
+		// 2 messages per edge (if a tree, this is 2(n-1) where n is node count.)
+		private int totalSize;
+		private int messageCount;
+
 		public VariableNode RootNode
 		{
 			get;

@@ -26,7 +26,7 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 		private Stack<Node> inSchedule;
 
 		// For scheduling messages out from root
-		private Stack<Node> outSchedule;
+		private Queue<Node> outSchedule;
 
 
 
@@ -37,14 +37,26 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 
 		public void Run()
 		{
-			// Schedules messages and computes them
+			// Schedule messages
+			MapFactorGraph();
 		}
 
 		private void MapFactorGraph()
 		{
-			VariableNode rootNode = factorGraph.RootNode;
-			// Idea: Go out from the root pushing to a stack.
-			// Then pop off the top of the stack and compute messages (whilst pushing to a new stack to reverse the order for the way back).
+			Queue<Node> searchQueue = new Queue<Node>();
+
+			Q.Enqueue(this.factorGraph.RootNode);
+
+			while (Q.Count > 0)
+			{
+				var v = Q.Dequeue();
+
+				foreach (Node u in v.Neighbours)
+				{
+					// Queue/Stack messages between u and v
+					Q.Enqueue(u);
+				}
+			}
 		}
 
 	}
