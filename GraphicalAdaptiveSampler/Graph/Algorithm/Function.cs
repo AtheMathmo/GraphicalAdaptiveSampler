@@ -16,7 +16,7 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 
 		// This is the framework for products of messages.
 		// We will update this to use lists (for types)
-		public void ProductFunc(Func<T, Double> newFunc)
+		public void ProductFunc(Func<T, double> newFunc)
 		{
 			// Basic idea.
 			Func<T, T, double> replacFunc = delegate(T orig, T newVar) {
