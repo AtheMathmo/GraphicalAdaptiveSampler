@@ -11,6 +11,7 @@ I am implementing belief propagation using factor graphs. The factor graphs cons
 - VariableNode
 
 Each node is reponsible for tracking it's neighbours and also notes who its parent/child is. Each factor has a single child and each variable a single parent, corresponding to p(v | a(v)), p is the factor which is the parent of v.
+_It isn't necessary to note the parents and children and so I may exclude it later for simplicity._
 
 The FactorGraph class records the root node and also stores all of the variable and factor nodes.
 
@@ -18,8 +19,8 @@ The FactorNode and VariableNode classes are abstract currently. I am leaning tow
 
 ## Belief Propagation
 
-Some details are still to be decided in terms of how the algorithm will be run. But the basic idea is to get the root node and work out to map the tree. As we do so we will build a LIFO stack which we will use later to schedule the message passing towards the root. As we unwind the stack we wil create a new stack in reverse order and use this for passing the messages awway from the root.
+Some details are still to be decided in terms of how the algorithm will be run. But the basic idea is to get the root node and work out to map the tree. As we do so we will build a LIFO stack and a FIFO queue which we will use later to schedule the message passing.
 
 ### Details still to be decided
 
-1. Where should the messages be stored? One option is to store the parents and chilren within dictionaries in the node classes - and take the values to be the messages to each neighbour.
+1. Where should the messages be stored? One option is to store the message values within the nodes themselves - along with the neighbour they are being passed towards.
