@@ -4,22 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Graph.Algorithm.Messages;
+
 namespace GraphicalAdaptiveSampler.Graph {
 
 	// This node represents a random variable in the factor graph
-	abstract class VariableNode : Node {
+	public class VariableNode : Node {
 		
-		public FactorNode ParentFactor
-		{
-			get;
-			set;
-		}
-
-		public FactorNode[] ChildFactors
-		{
-			get;
-			set;
-		}
-	}
+		// Will contain a variable object
 
 }

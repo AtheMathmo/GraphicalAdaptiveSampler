@@ -15,12 +15,20 @@ _It isn't necessary to note the parents and children and so I may exclude it lat
 
 The FactorGraph class records the root node and also stores all of the variable and factor nodes.
 
-The FactorNode and VariableNode classes are abstract currently. I am leaning towards having the FactorNode be a wrapper for the factor. Factors must be implemented on a per use basis (e.g. factor for sum of Gaussians). It makes sense to keep the factors and the graph/algorithm separate.
+The FactorNode and VariableNode classes are wrappers for the factor and variables respectively. Factors must be implemented on a per use basis (e.g. factor for sum of Gaussians). It makes sense to keep the factors and the graph/algorithm separate.
 
 ## Belief Propagation
 
 Some details are still to be decided in terms of how the algorithm will be run. But the basic idea is to get the root node and work out to map the tree. As we do so we will build a LIFO stack and a FIFO queue which we will use later to schedule the message passing.
 
+The messages are stored within the Nodes - a dictionary maps each neighbour to an outbound message. This is probably not the best way to handle this as the graphical model and the algorithm are closely linked.
+
 ### Details still to be decided
 
-1. Where should the messages be stored? One option is to store the message values within the nodes themselves - along with the neighbour they are being passed towards.
+1. How to handle message computation. Right now I am looking at delegate functions and having the message class be a wrapper for this function. The function will provide methods to do summation and products. *I'm sure there's a better way to handle this.*
+
+## TODO:
+
+1. Implement message computation.
+
+

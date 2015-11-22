@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Graph;
+using GraphicalAdaptiveSampler.Graph.Algorithm.Messages;
 
 namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 
@@ -23,10 +24,10 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 		private FactorGraph factorGraph;
 
 		// For scheduling messages towards root
-		private Stack<Node> inSchedule;
+		private Stack<IMessage> inSchedule;
 
 		// For scheduling messages out from root
-		private Queue<Node> outSchedule;
+        private Queue<IMessage> outSchedule;
 
 
 
@@ -53,7 +54,12 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 
 				foreach (Node u in v.Neighbours)
 				{
-					// Queue/Stack messages between u and v
+					// Queue messages from v to u
+                    this.outSchedule.Enqueue(v.OutMessages[u]);
+
+                    // Stack messages from u to v
+                    this.inSchedule.Push(u.OutMessages[v]);
+
                     searchQueue.Enqueue(u);
 				}
 			}

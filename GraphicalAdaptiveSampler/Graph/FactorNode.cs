@@ -4,25 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Graph.Algorithm.Messages;
+
 namespace GraphicalAdaptiveSampler.Graph {
 
 	// This node represents a factor in the factor graph
-	abstract class FactorNode : Node {
+	public class FactorNode : Node {
 		
-		public VariableNode ChildVariable
-		{
-			get;
-			set;
-		}
+		// Will contain a Factor object which knows the parents and children (and the density).
 
-		public VariableNode[] ParentVariables
-		{
-			get;
-			set;
-		}
+        private F_V_Message[] outMessages;
 
-		// Still figuring this out...
-		public abstract double Density();
+        public void InitializeMessages()
+        {
+            this.outMessages = new F_V_Message[this.NeighbourCount];
+        }
 	}
 
 }
