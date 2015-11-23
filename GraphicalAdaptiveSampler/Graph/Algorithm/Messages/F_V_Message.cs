@@ -16,6 +16,12 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 		private VariableNode variable;
 		private FactorNode factor;
 
+        public F_V_Message(FactorNode factor, VariableNode variable)
+        {
+            this.factor = factor;
+            this.variable = variable;
+        }
+
 		public void ComputeMessage()
 		{
 			// Find the neighbours of the factor
@@ -23,7 +29,24 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 			// Product of the incoming messages with the factor
 			// Sum over this product (all variables except V)
 			// Return this new function
-		}
+
+            VariableNode[] neighbours = (VariableNode[]) factor.Neighbours;
+
+            List<V_F_Message> incomingMessages = new List<V_F_Message>();
+
+            foreach (VariableNode neighbour in neighbours)
+            {
+                if (neighbour == variable)
+                {
+                    continue;
+                }
+
+                incomingMessages.Add((V_F_Message) neighbour.OutMessages[factor]);
+            }
+
+            //TODO: use incoming messages to complete message computation.
+
+        }
 		
 		
 	}

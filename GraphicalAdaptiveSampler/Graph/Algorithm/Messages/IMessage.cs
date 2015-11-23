@@ -9,7 +9,7 @@ using GraphicalAdaptiveSampler.Graph;
 namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 
 	// Interface for message
-	interface IMessage {
+	public interface IMessage {
 
 		// Rather than void this should return a function.
 		void ComputeMessage();

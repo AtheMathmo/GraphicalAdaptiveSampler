@@ -13,16 +13,39 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
 	// Given by product of all messages going into variable.
 	class V_F_Message : IMessage {
 
-		private VariableNode variable;
-		private FactorNode factor;
+        private VariableNode variable;
+        private FactorNode factor;
 
-		public void ComputeMessage()
-		{
-			// Find the neighbours of the variable
-			// Get their incoming messages to the variable
-			// Product of the incoming messages
-			// Return the new function which is the product of the other functions
-		}
+        public V_F_Message(VariableNode variable, FactorNode factor)
+        {
+            this.factor = factor;
+            this.variable = variable;
+        }
+
+        public void ComputeMessage()
+        {
+            // Find the neighbours of the variable
+            // Get their incoming messages to the variable
+            // Product of the incoming messages
+            // Return the new function which is the product of the other functions
+
+            FactorNode[] neighbours = (FactorNode[]) variable.Neighbours;
+
+            List<F_V_Message> incomingMessages = new List<F_V_Message>();
+
+            foreach (FactorNode neighbour in neighbours)
+            {
+                if (neighbour == factor)
+                {
+                    continue;
+                }
+
+                incomingMessages.Add((F_V_Message) neighbour.OutMessages[factor]);
+            }
+
+            //TODO: use incoming messages to complete message computation.
+
+        }
 
 	}
 

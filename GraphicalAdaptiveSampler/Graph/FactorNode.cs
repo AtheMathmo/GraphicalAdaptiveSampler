@@ -13,11 +13,10 @@ namespace GraphicalAdaptiveSampler.Graph {
 		
 		// Will contain a Factor object which knows the parents and children (and the density).
 
-        private F_V_Message[] outMessages;
-
-        public void InitializeMessages()
+        public Node[] Neighbours
         {
-            this.outMessages = new F_V_Message[this.NeighbourCount];
+            get;
+            set;
         }
 	}
 

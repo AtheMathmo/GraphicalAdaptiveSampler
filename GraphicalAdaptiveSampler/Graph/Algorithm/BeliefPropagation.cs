@@ -18,8 +18,8 @@ namespace GraphicalAdaptiveSampler.Graph.Algorithm {
 		// 3. Schedule the messages:
 		//		- Start from the furthest leaf on each branch and push messages towards the root until each branch reaches root.
 		//		- Start from the root and push messages out towards the leafs until all leafs are reached.
-
-		// 4. Get marginals by taking product of messages
+        // 4. Compute messages
+		// 5. Get marginals by taking product of messages
 
 		private FactorGraph factorGraph;
 

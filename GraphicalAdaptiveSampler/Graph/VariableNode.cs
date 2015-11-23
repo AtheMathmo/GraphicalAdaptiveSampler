@@ -13,4 +13,5 @@ namespace GraphicalAdaptiveSampler.Graph {
 		
 		// Will contain a variable object
 
+    }
 }
