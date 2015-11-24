@@ -13,9 +13,6 @@ namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 	// Given by summation (excluding variable) of product of messages into factor and factor.
 	class F_V_Message : Message {
 
-		private VariableNode variable;
-		private FactorNode factor;
-
         public F_V_Message(FactorNode factor, VariableNode variable)
         {
             this.factor = factor;

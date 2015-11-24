@@ -11,6 +11,9 @@ namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 	// Interface for message
 	public abstract class Message {
 
+		protected VariableNode variable;
+		protected FactorNode factor;
+
 		public Func<double, double>	MessageFunc
 		{
 			get;

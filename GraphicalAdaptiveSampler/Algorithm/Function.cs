@@ -14,7 +14,7 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 		/// Computes the product of messages coming into a variable
 		/// </summary>
 		/// <param name="messages">The messages to be producted.</param>
-		/// <returns>The product of all messages.</returns>
+		/// <returns>The product function of all messages.</returns>
 		public Func<double, double> ProductFunc(List<Message> messages)
 		{
 			// Construct the product of the message functions
