@@ -4,24 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GraphicalAdaptiveSampler.Algorithm.Messages;
+
 namespace GraphicalAdaptiveSampler.Algorithm {
 
-	class Function<T> {
-
-		private Func<T, double> func;
-
-		// This class will contain a delegate which is used by the messages.
-		// We will provide methods to take products and sums of these delegates.
-		// THIS IS CURRENTLY NOT IMPLEMENTED
+	public class FunctionConstructor {
 
 		// This is the framework for products of messages.
 		// We will update this to use lists (for types)
-		public void ProductFunc(Func<T, double> newFunc)
+		public void ProductFunc(List<IMessage> messages)
 		{
 			// Basic idea.
-			Func<T, T, double> replacFunc = delegate(T orig, T newVar) {
-				return func(orig)*newFunc(newVar);
-			};
+			//Func<T, T, double> replacFunc = delegate(T orig, T newVar) {
+			//	return func(orig)*newFunc(newVar);
+			//};
+
 		}
 
 		public void Summarize()

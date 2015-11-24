@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Graph;
-using GraphicalAdaptiveSampler.Graph.Algorithm.Messages;
+using GraphicalAdaptiveSampler.Algorithm.Messages;
 
-namespace GraphicalAdaptiveSampler.Graph.Algorithm {
+namespace GraphicalAdaptiveSampler.Algorithm {
 
 	class BPAlgorithm {
 

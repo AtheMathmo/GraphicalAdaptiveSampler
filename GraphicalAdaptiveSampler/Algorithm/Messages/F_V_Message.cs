@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Graph;
-using GraphicalAdaptiveSampler.Graph.Algorithm;
+using GraphicalAdaptiveSampler.Algorithm;
 
-namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
+namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 
 	// Message from factor to variable
 	// Given by summation (excluding variable) of product of messages into factor and factor.

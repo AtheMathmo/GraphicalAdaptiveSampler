@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using GraphicalAdaptiveSampler.Graph;
 
-namespace GraphicalAdaptiveSampler.Graph.Algorithm.Messages {
+namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 
 	// Interface for message
 	public interface IMessage {
