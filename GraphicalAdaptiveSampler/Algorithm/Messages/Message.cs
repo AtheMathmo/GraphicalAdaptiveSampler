@@ -9,10 +9,16 @@ using GraphicalAdaptiveSampler.Graph;
 namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 
 	// Interface for message
-	public interface IMessage {
+	public abstract class Message {
+
+		public Func<double, double>	MessageFunc
+		{
+			get;
+			set;
+		}
 
 		// Rather than void this should return a function.
-		void ComputeMessage();
+		public abstract void ComputeMessage();
 
 	}
 

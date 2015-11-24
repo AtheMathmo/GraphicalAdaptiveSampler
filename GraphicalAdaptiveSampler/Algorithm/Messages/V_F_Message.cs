@@ -11,7 +11,7 @@ namespace GraphicalAdaptiveSampler.Algorithm.Messages {
 
 	// Message from Variable to Factor
 	// Given by product of all messages going into variable.
-	class V_F_Message : IMessage {
+	class V_F_Message : Message {
 
         private VariableNode variable;
         private FactorNode factor;
@@ -22,7 +22,7 @@ namespace GraphicalAdaptiveSampler.Algorithm.Messages {
             this.variable = variable;
         }
 
-        public void ComputeMessage()
+        public override void ComputeMessage()
         {
             // Find the neighbours of the variable
             // Get their incoming messages to the variable

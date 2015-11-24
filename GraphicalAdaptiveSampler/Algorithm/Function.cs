@@ -10,14 +10,25 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 
 	public class FunctionConstructor {
 
-		// This is the framework for products of messages.
-		// We will update this to use lists (for types)
-		public void ProductFunc(List<IMessage> messages)
+		/// <summary>
+		/// Computes the product of messages coming into a variable
+		/// </summary>
+		/// <param name="messages">The messages to be producted.</param>
+		/// <returns>The product of all messages.</returns>
+		public Func<double, double> ProductFunc(List<Message> messages)
 		{
-			// Basic idea.
-			//Func<T, T, double> replacFunc = delegate(T orig, T newVar) {
-			//	return func(orig)*newFunc(newVar);
-			//};
+			// Construct the product of the message functions
+			Func<double, double> productFunc = delegate(double x)
+			{
+				double productValue = 1.0;
+				foreach(Message message in messages)
+				{
+					productValue *= message.MessageFunc(x);
+				}
+				return productValue;
+			};
+
+			return productFunc;
 
 		}
 

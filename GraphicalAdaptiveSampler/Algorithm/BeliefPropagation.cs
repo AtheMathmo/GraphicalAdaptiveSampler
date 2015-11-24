@@ -24,10 +24,10 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 		private FactorGraph factorGraph;
 
 		// For scheduling messages towards root
-		private Stack<IMessage> inSchedule;
+		private Stack<Message> inSchedule;
 
 		// For scheduling messages out from root
-        private Queue<IMessage> outSchedule;
+        private Queue<Message> outSchedule;
 
 
 
