@@ -18,26 +18,43 @@ namespace GraphicalAdaptiveSampler.Algorithm {
 		public Func<double, double> ProductFunc(List<Message> messages)
 		{
 			// Construct the product of the message functions
-			Func<double, double> productFunc = delegate(double x)
-			{
-				double productValue = 1.0;
-				foreach(Message message in messages)
-				{
-					productValue *= message.MessageFunc(x);
-				}
-				return productValue;
-			};
+            Func<double, double> productFunc = x => 1.0;
 
-			return productFunc;
+            foreach (Message message in messages)
+            {
+                Func<double, double> currentFunc = productFunc;
+                productFunc = x => currentFunc(x) * message.MessageFunc(x);
+            }
+
+            return productFunc;
 
 		}
 
-		public void Summarize()
+		public Func<double, double> Summarize(List<Message> messages)
 		{
-			//Func<T, TResult> = delegate(T orig) {
-			//	Loop through each value for each variable
-			//  Sum them up and return the result as a function of orig.
-			//};
+            Func<double, double> summaryFunc = x => 0.0;
+			
+            // Get all the variables being summed over (from the message variable nodes)
+
+            // loop over variable values
+            // [var1, var2, var3]
+            // var1 at min, var2 at min, go through var3
+            // var1 at min, var2+1, go through var3
+            // repeat until all combinations are found
+            {
+
+                // loop over messages
+                {
+                    // take product of messages at this given configuration
+                }
+
+                // multiply by factor at this given configuration (as a function of x)
+
+                // add to summaryFunc
+
+            }
+
+
 		}
 
 

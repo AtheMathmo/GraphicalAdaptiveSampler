@@ -23,9 +23,7 @@ Some details are still to be decided in terms of how the algorithm will be run. 
 
 The messages are stored within the Nodes - a dictionary maps each neighbour to an outbound message. This is probably not the best way to handle this as the graphical model and the algorithm are closely linked.
 
-### Details still to be decided
-
-1. How to handle message computation. Right now I am looking at delegate functions and having the message class be a wrapper for this function. The function will provide methods to do summation and products. *I'm sure there's a better way to handle this.*
+The messages are being computed within a helper class. I am using delegate Funcs and have mapped out how I am going to compute the messages for variables and factors. (Annotated in code).
 
 ## TODO:
 

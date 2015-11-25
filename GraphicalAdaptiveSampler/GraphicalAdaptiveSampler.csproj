@@ -61,10 +61,10 @@
     <Compile Include="Algorithm\BeliefPropagation.cs" />
     <Compile Include="Algorithm\Function.cs" />
     <Compile Include="Algorithm\Messages\F_V_Message.cs" />
-    <Compile Include="Algorithm\Messages\IMessage.cs" />
     <Compile Include="Algorithm\Messages\V_F_Message.cs" />
     <Compile Include="Graph\FactorNode.cs" />
     <Compile Include="Graph\Node.cs" />
+    <Compile Include="Algorithm\Messages\Message.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
