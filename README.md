@@ -2,7 +2,7 @@
 
 This project is (going to be) a combination of discrete belief propagation and adaptive rejection sampling.
 
-I plan to implement belief propagation on tree Factor Graphs for discrete distributions. And then using adaptive rejection sampling apply this to simple (univariate) continuous distributions.
+I plan to implement belief propagation on tree Factor Graphs for discrete distributions. And then using adaptive rejection sampling apply this to simple (univariate) continuous distributions. The idea is loosely based off of a Hackathon project undertaken whilst at MSR.
 
 This is a work in progress.
 
